@@ -41,28 +41,30 @@ app.get("/api/search", (require, response) => {
 });
 
 app.put("/api/update/", (require, response) => {
-    const tableName = require.body.tableName;
-    const attr = require.body.attr;
-    const value = require.body.value;
-    const attrChange = require.body.attrChange;
+    // const tableName = require.body.tableName;
+    // const attr = require.body.attr;
+    const value = require.body.patientID;
+    // const attrChange = require.body.attrChange;
     const valueChange = require.body.valueChange;
 
-    const sqlUpdate = "UPDATE ? SET ? = ? WHERE ?= ?";
-    db.query(sqlUpdate, [tableName, attrChange, valueChange, attr, value], (err, result) => {
+    const sqlUpdate = "UPDATE 'Patients' SET 'Email' = ? WHERE 'PatientID'= ?";
+    db.query(sqlUpdate, [valueChange, patientID], (err, result) => {
         if (err) 
         console.log(error);
+        response.send(result);
     })
 });
 
 app.delete("/api/delete/:movieName", (require, response) => {
-    const tableName = require.body.tableName;
-    const attr = require.body.attr;
+    // const tableName = require.body.tableName;
+    // const attr = require.body.attr;
     const value = require.body.value;
-
-    const sqlDelete = "DELETE FROM ? WHERE ?= ?";
-    db.query(sqlDelete, [tableName, attr, value], (err, result) => {
+ 
+    const sqlDelete = "DELETE FROM 'Doctors' WHERE 'Email' = ?";
+    db.query(sqlDelete, [value], (err, result) => {
         if (err) 
         console.log(error);
+        response.send('1');
     })
 });
 // advanced SQL queries
