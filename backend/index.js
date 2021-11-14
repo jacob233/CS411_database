@@ -60,7 +60,7 @@ app.delete("/api/delete/:movieName", (require, response) => {
     // const attr = require.body.attr;
     const value = require.body.value;
  
-    const sqlDelete = "DELETE FROM 'Doctors' WHERE 'Email' = ?";
+    const sqlDelete = "DELETE FROM 'Doctors' WHERE 'DoctorID' = ?";
     db.query(sqlDelete, [value], (err, result) => {
         if (err) 
         console.log(error);
