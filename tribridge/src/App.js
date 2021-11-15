@@ -85,6 +85,17 @@ function App() {
   const [patPerCompany, setpatPerCompany] = useState([]);
 
 
+  // advance query 2
+  const [date, setDate] = useState()
+  const setReportDate = () => {
+    Axios.post('http://localhost:3002/api/reportsPerCompany', {
+      patientFName: patientFName,
+      patientLName: patientLName,
+      patientEmail: patientEmail
+    });
+
+  }
+
   // useEffect(() => {
   //   Axios.get('http://localhost:3002/api/totalPatients').then((response) => {
   //     console.log(response.data)
@@ -179,6 +190,20 @@ function App() {
         <button onClick={() => {
                 deletePatient(delPatID)
         }}> delete</button>
+
+      </div>
+
+
+
+      
+      <div className = "card">
+        <h1> Reports Number </h1>
+        <p>Date: </p>
+        <input type="text" id="patSelectInput" onChange={(e) => {
+                setDate(e.target.value)
+        } }/>
+
+        <button onClick={setReportDate}> Check </button>
 
       </div>
 
