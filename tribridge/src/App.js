@@ -83,7 +83,7 @@ function App() {
 
   // advance query 1
   const [patPerCompany, setpatPerCompany] = useState([]);
-
+  const [PatPerCompanyBtn, setPatPerCompanyBtn] = useState(false);
 
   // const getPatPerCompany = () => {
   //   Axios.get('http://localhost:3002/api/totalPatients', {
@@ -102,7 +102,7 @@ function App() {
   },[])
 
   // advance query 2
-  const [pateintDate, setDate] = useState('2000-03-11 02:06:23');
+  const [pateintDate, setDate] = useState('');
   const [companyNameReport, setcompanyNameReport] = useState([]);
   // setcompanyNameReport([{"MedCompanyName": 'Zieme-Osinski', "total": 2}])
 
@@ -110,7 +110,7 @@ function App() {
     Axios.post('http://localhost:3002/api/reportsPerCompany', {
       date: pateintDate
     }).then((response) => {
-      // console.log(response.data)
+      console.log(response.data)
       setcompanyNameReport(response.data)
       // show in the front-end as a table or list or something.
     });
@@ -221,13 +221,20 @@ function App() {
 
 
       <div className = "card">
-        <h1> Reports Number </h1>
+        <h1> Patient per Company </h1>
+        <button onClick={() => {setPatPerCompanyBtn(true)}
+        }> Check </button>
+      </div>
+
+      <div className = "card">
+        <h1> Num Report Per Company </h1>
         <p>Date: </p>
         <input type="text" id="patSelectInput" onChange={(e) => {
                 setDate(e.target.value)
         } }/>
 
-        <button onClick={setReportDate(pateintDate)}> Check </button>
+        <button onClick={() => {setReportDate(pateintDate)}
+        }> Check </button>
       </div>
     
 
@@ -235,28 +242,34 @@ function App() {
 
 
 
+
+    <ul>
+      {
+        patPerCompany.map((val) => {
+          if(PatPerCompanyBtn){
+
+                return (
+                    <li id="list-to-left">{val.company_name} : {val.total_patient}</li>        
+                );
+          }
+              }
+          )
+        }   
+      </ul>
+
       <ul>
         {
         companyNameReport.map((val) => {
-                return (
-                    <li id="list-to-left">{val.MedCompanyName} : {val.total}</li>        
-                );
+            return (
+              <li id="list-to-left">{val.MedCompanyName} : {val.total}</li>        
+          );
+               
               }
           )
         }   
       
     </ul>
 
-    <ul>
-      {
-        patPerCompany.map((val) => {
-                return (
-                    <li id="list-to-left">{val.company_name} : {val.total_patient}</li>        
-                );
-              }
-          )
-        }   
-      </ul>
 
     </div>
 
