@@ -99,17 +99,16 @@ app.get("/api/totalPatients", (require, response) => {
 });
 
 // Count number of reports in each company generated before 'some time'like '2021-03-11 02:06:23'
-app.get("/api/reportsPerCompany", (require, response) => {
+app.post("/api/reportsPerCompany", (require, response) => {
     const date = require.body.date;
-
-
+    console.log(date)
     const sqlSelect = "SELECT mc.MedCompanyName, count(r.ReportID)  \
     FROM Medical_companies mc \
     JOIN Trials t ON mc.MedCompanyID = t.MedCompanyID \
     JOIN Reports r ON t.TrialID = r.TrialID\
     WHERE r.Date < ?\
     GROUP BY mc.MedCompanyName";
-    db.query(sqlSelect,[date], (err, result) => {
+    db.query(sqlSelect,date, (err, result) => {
         response.send(result);
     });
 });

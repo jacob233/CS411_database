@@ -86,14 +86,14 @@ function App() {
 
 
   // advance query 2
-  const [date, setDate] = useState()
-  const setReportDate = () => {
+  const [pateintDate, setDate] = useState('')
+  const setReportDate = (pateintDate) => {
     Axios.post('http://localhost:3002/api/reportsPerCompany', {
-      patientFName: patientFName,
-      patientLName: patientLName,
-      patientEmail: patientEmail
+      date: pateintDate
+    }).then((response) => {
+      console.log(response.data)
+      // show in the front-end as a table or list or something.
     });
-
   }
 
   // useEffect(() => {
@@ -203,7 +203,7 @@ function App() {
                 setDate(e.target.value)
         } }/>
 
-        <button onClick={setReportDate}> Check </button>
+        <button onClick={setReportDate(pateintDate)}> Check </button>
 
       </div>
 
