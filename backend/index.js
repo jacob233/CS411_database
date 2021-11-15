@@ -5,10 +5,11 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 var db = mysql.createConnection({ //need to confirm this part
-    host:'35.192.26.71',
+    host:'35.192.126.71',
+    port:'3306',
     user:'root',
-    password:"123456",
-    database:"tribridge" , 
+    password:"C411projS",
+    database:"tribridge" 
 })
 
 
@@ -16,26 +17,30 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.post("/api/insert", (require, response) => {
-    const tableName = require.body.tableName;
-    const IDEntryName = require.body.IDEntryName;
-    const contentEntryName = require.body.contentEntryName;
-    const ID = require.body.ID;
-    const content = require.body.content;///tbd
+db.connect(function(err) {
+    if (err) throw err;
+  });
 
-    const sqlInsert = "INSERT INTO ? (?, ?) VALUES (?,?)";
-    db.query(sqlInsert, [tableName, IDEntryName, contentEntryName, ID, content], (err, result) => {
-        console.log(error);
+app.post("/api/insert", (require, response) => {
+    // const tableName = require.body.tableName;
+    const Fname = require.body.Fname;
+    const Lname = require.body.Lname;
+    const Affi = require.body.Affiliation;
+    const Email = require.body.Email;///tbd
+
+    const sqlInsert = "INSERT INTO Doctors (Fname, Lname, Affi, Email) VALUES (?,?,?,?)";
+    db.query(sqlInsert, [Fname, Lname, Affi, Email], (err, result) => {
+        console.log(result.affectedRows + " record(s) updated");
     })
 });
 
 app.get("/api/search", (require, response) => {
-    const tableName = require.body.tableName;
-    const attr = require.body.attr;
+    // const tableName = require.body.tableName;
+    // const attr = require.body.attr;
     const value = require.body.value;
 
-    const sqlSelect = "SELECT * FROM ? WHERE ? = ?";
-    db.query(sqlSelect, [tableName, attr, value], (err, result) => {
+    const sqlSelect = "SELECT * FROM Patients WHERE PatientID = ?";
+    db.query(sqlSelect, [value], (err, result) => {
         response.send(result);
     });
 });
@@ -47,7 +52,7 @@ app.put("/api/update/", (require, response) => {
     // const attrChange = require.body.attrChange;
     const valueChange = require.body.valueChange;
 
-    const sqlUpdate = "UPDATE 'Patients' SET 'Email' = ? WHERE 'PatientID'= ?";
+    const sqlUpdate = "UPDATE Patients SET Email = ? WHERE PatientID= ?";
     db.query(sqlUpdate, [valueChange, patientID], (err, result) => {
         if (err) 
         console.log(error);
@@ -55,12 +60,12 @@ app.put("/api/update/", (require, response) => {
     })
 });
 
-app.delete("/api/delete/:movieName", (require, response) => {
+app.delete("/api/delete/:patID", (require, response) => {
     // const tableName = require.body.tableName;
     // const attr = require.body.attr;
     const value = require.body.value;
  
-    const sqlDelete = "DELETE FROM 'Doctors' WHERE 'DoctorID' = ?";
+    const sqlDelete = "DELETE FROM Patients WHERE PatientID = ?";
     db.query(sqlDelete, [value], (err, result) => {
         if (err) 
         console.log(error);
