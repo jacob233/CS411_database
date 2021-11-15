@@ -85,6 +85,22 @@ function App() {
   const [patPerCompany, setpatPerCompany] = useState([]);
 
 
+  // const getPatPerCompany = () => {
+  //   Axios.get('http://localhost:3002/api/totalPatients', {
+  //   }).then((response) => {
+  //     console.log(response)
+  //     setpatPerCompany(response)
+  //     // show in the front-end as a table or list or something.
+  //   });
+  // }
+
+  useEffect(() => {
+    Axios.get('http://localhost:3002/api/totalPatients').then((response) => {
+      setpatPerCompany(response.data)
+      console.log(response.data)
+    })
+  },[])
+
   // advance query 2
   const [pateintDate, setDate] = useState('2000-03-11 02:06:23');
   const [companyNameReport, setcompanyNameReport] = useState([]);
@@ -94,7 +110,7 @@ function App() {
     Axios.post('http://localhost:3002/api/reportsPerCompany', {
       date: pateintDate
     }).then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       setcompanyNameReport(response.data)
       // show in the front-end as a table or list or something.
     });
@@ -214,9 +230,11 @@ function App() {
         <button onClick={setReportDate(pateintDate)}> Check </button>
       </div>
     
-      {console.log(companyNameReport == [])}
 
       {/* <printCompanyReports isFilled={companyNameReport == []}/> */}
+
+
+
       <ul>
         {
         companyNameReport.map((val) => {
@@ -228,6 +246,17 @@ function App() {
         }   
       
     </ul>
+
+    <ul>
+      {
+        patPerCompany.map((val) => {
+                return (
+                    <li id="list-to-left">{val.company_name} : {val.total_patient}</li>        
+                );
+              }
+          )
+        }   
+      </ul>
 
     </div>
 
