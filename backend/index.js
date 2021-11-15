@@ -23,14 +23,14 @@ db.connect(function(err) {
 
 app.post("/api/insert", (require, response) => {
     // const tableName = require.body.tableName;
-    const Fname = require.body.Fname;
-    const Lname = require.body.Lname;
-    const Affi = require.body.Affiliation;
-    const Email = require.body.Email;///tbd
+    const Fname = require.body.docfname;
+    const Lname = require.body.docLname;
+    const Affi = require.body.docAffil;
+    const Email = require.body.docEmail;///tbd
 
     const sqlInsert = "INSERT INTO Doctors (Fname, Lname, Affi, Email) VALUES (?,?,?,?)";
     db.query(sqlInsert, [Fname, Lname, Affi, Email], (err, result) => {
-        console.log(result.affectedRows + " record(s) updated");
+        response.send(result.affectedRows)
     })
 });
 

@@ -3,23 +3,38 @@ import React, {useState, useEffect} from "react";
 import Axios from 'axios'
 
 function App() {
+  const [hasError, sethasError] = useState(false);
 
+
+  // for insert
+  const [docfname, setDocfname] = useState('');
+  const [docLname, setDocLname] = useState('');
+  const [docAffil, setDocAffil] = useState('');
   const [docEmail, setDoctEmail] = useState('');
-  const [patfname, setPatfname] = useState('');
-  const [patLname, setPatLname] = useState('');
 
-  const [patemail, setpatemail] = useState('');
 
+  const insertPatient = (docfname, docLname, docAffil, docEmail) => { 
+    Axios.post('http://localhost:3002/api/insert', {
+      docfname: docfname,
+      docLname: docLname,
+      docAffil, docAffil,
+      docEmail, docEmail
+    }).then((response) => {
+      setsePatRow(response.data)
+    })
+  };
 
   // for select
   const [sePatID, setsePatID] = useState('');
   const [sePatRow, setsePatRow]  = useState([]);
 
   const selectPatient = (patID) => {
-    Axios.get('http://localhost:3002/api/get', {
+    Axios.get('http://localhost:3002/api/search', {
       patID: patID,
     }).then((response) => {
-      setsePatRow(response.data)
+      if (response.data != 1){
+        sethasError(true)
+      }
     })
   };
 
@@ -52,6 +67,7 @@ function App() {
   // };
 
   return (
+
     <div className="App">
       <h1>Tribrdige DB demo</h1>
       <div className="form">
@@ -59,6 +75,29 @@ function App() {
         <input type="text" name="movieName"/>
 
         <button>Submit</button>
+      </div>
+
+      <div className = "card">
+        <h1> INSERT doctor:  </h1>
+        <p>doctor first name:</p>
+        <input type="text" id="patSelectInput" onChange={(e) => {
+                setDocfname(e.target.value)
+        } }/>
+        <p>doctor last name:</p>
+        <input type="text" id="patSelectInput" onChange={(e) => {
+                setDocLname(e.target.value)
+        } }/>
+        <p>doctor last name:</p>
+        <input type="text" id="patSelectInput" onChange={(e) => {
+                setDocAffil(e.target.value)
+        } }/>
+        <p>doctor last name:</p>
+        <input type="text" id="patSelectInput" onChange={(e) => {
+                setDoctEmail(e.target.value)
+        } }/>
+        <button onClick={() => {
+                insertPatient(docfname, docLname, docAffil, docEmail)
+        }}> INSERT</button>
       </div>
 
       <div className = "card">
@@ -81,9 +120,9 @@ function App() {
         <button onClick={() => {
                 selectPatient(sePatID)
         }}> SELECT</button>
-
-
       </div>
+
+
 
 
       <div className = "card">
