@@ -17,8 +17,8 @@ function App() {
     Axios.post('http://localhost:3002/api/insert', {
       docfname: docfname,
       docLname: docLname,
-      docAffil, docAffil,
-      docEmail, docEmail
+      docAffil: docAffil,
+      docEmail: docEmail
     }).then((response) => {
       setsePatRow(response.data)
     })
