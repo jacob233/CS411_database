@@ -28,16 +28,21 @@ app.post("/api/insert", (require, response) => {
     const Affi = require.body.docAffil;
     const Email = require.body.docEmail;///tbd
 
-    const sqlInsert = "INSERT INTO Doctors (Fname, Lname, Affi, Email) VALUES (?,?,?,?)";
+
+    const sqlInsert = "INSERT INTO Doctors (Fname, Lname, Affiliation, Email) VALUES (?,?,?,?)";
     db.query(sqlInsert, [Fname, Lname, Affi, Email], (err, result) => {
-        response.send(result.affectedRows)
+        console.log(result)
+        //response.send(result.affectedRows)
     })
 });
 
-app.get("/api/search", (require, response) => {
+app.post("/api/search", (require, response) => {
     // const tableName = require.body.tableName;
     // const attr = require.body.attr;
-    const value = require.body.value;
+    const value = require.body.patID;
+    console.log(value)
+    //response.send(require);
+
 
     const sqlSelect = "SELECT * FROM Patients WHERE PatientID = ?";
     db.query(sqlSelect, [value], (err, result) => {
@@ -45,30 +50,31 @@ app.get("/api/search", (require, response) => {
     });
 });
 
+
 app.put("/api/update/", (require, response) => {
     // const tableName = require.body.tableName;
     // const attr = require.body.attr;
-    const value = require.body.patientID;
+    const patientID = require.body.patID;
     // const attrChange = require.body.attrChange;
-    const valueChange = require.body.valueChange;
-
+    const patNewEmail = require.body.patNewEmail;
+    console.log(require.body)
     const sqlUpdate = "UPDATE Patients SET Email = ? WHERE PatientID= ?";
-    db.query(sqlUpdate, [valueChange, patientID], (err, result) => {
+    db.query(sqlUpdate, [patNewEmail, patientID], (err, result) => {
         if (err) 
-        console.log(error);
+        console.log(err);
         response.send(result);
     })
 });
 
-app.delete("/api/delete/:patID", (require, response) => {
+app.post("/api/delete", (require, response) => {
     // const tableName = require.body.tableName;
     // const attr = require.body.attr;
-    const value = require.body.value;
- 
+    const value = require.body.patID;
+    console.log(value)
     const sqlDelete = "DELETE FROM Patients WHERE PatientID = ?";
-    db.query(sqlDelete, [value], (err, result) => {
+    db.query(sqlDelete, value, (err, result) => {
         if (err) 
-        console.log(error);
+        console.log(err);
         response.send('1');
     })
 });

@@ -28,15 +28,29 @@ function App() {
   const [sePatID, setsePatID] = useState('');
   const [sePatRow, setsePatRow]  = useState([]);
 
+  // const selectPatient = (patID) => {
+  //   Axios.get(`http://localhost:3002/api/search/${patID}`);
+  //   // .then((response) => {
+  //   //   // if (response.data != 1){
+  //   //   //   sethasError(true)
+  //   //   // }
+  //   //   setsePatRow(response.data)
+  //   // })
+  // };
+
   const selectPatient = (patID) => {
-    Axios.get('http://localhost:3002/api/search', {
+    Axios.post('http://localhost:3002/api/search', {
       patID: patID,
-    }).then((response) => {
-      if (response.data != 1){
-        sethasError(true)
+    })
+    .then((response) => {
+      if (response.data == []){
+        setsePatRow(response.data[0])
       }
+     
     })
   };
+
+
 
   // for updates
   const [upPatfname, setupPatfname] = useState('');
@@ -56,19 +70,32 @@ function App() {
   // for delete
   const [delPatID, setdelPatID] = useState('');
   const deletePatient = (patID) => {
-    Axios.delete(`http://localhost:3002/api/delete`, {
+    Axios.post(`http://localhost:3002/api/delete`, {
       patID: patID
     });
-    selectPatient(patID)
+    //selectPatient(patID)
   };
 
   // const deleteReview = (movieName) => {
   //   Axios.delete(`http://localhost:3002/api/delete/${movieName}`);
   // };
 
-  return (
 
+  // advance query 1
+  const [patPerCompany, setpatPerCompany] = useState([]);
+
+
+  // useEffect(() => {
+  //   Axios.get('http://localhost:3002/api/totalPatients').then((response) => {
+  //     console.log(response.data)
+  //     setpatPerCompany(response.data)
+  //   })
+  // },[])
+  
+
+  return (
     <div className="App">
+      {/* <p>{patPerCompany}</p> */}
       <h1>Tribrdige DB demo</h1>
       <div className="form">
         <label>Patient Name: </label>
@@ -87,11 +114,11 @@ function App() {
         <input type="text" id="patSelectInput" onChange={(e) => {
                 setDocLname(e.target.value)
         } }/>
-        <p>doctor last name:</p>
+        <p>doctor Affiliation:</p>
         <input type="text" id="patSelectInput" onChange={(e) => {
                 setDocAffil(e.target.value)
         } }/>
-        <p>doctor last name:</p>
+        <p>doctor Email:</p>
         <input type="text" id="patSelectInput" onChange={(e) => {
                 setDoctEmail(e.target.value)
         } }/>
@@ -103,7 +130,7 @@ function App() {
       <div className = "card">
         <h2>Reflecting Patient</h2>
         <ol id="listView">
-        <li>ID: {sePatRow.PatID}</li>
+        <li>ID: {sePatRow.PatientID}</li>
         <li>First Name: {sePatRow.Fname}</li>
         <li>Last Name: {sePatRow.Lname}</li>
         <li>Email: {sePatRow.Email}</li>
@@ -119,6 +146,7 @@ function App() {
 
         <button onClick={() => {
                 selectPatient(sePatID)
+                console.log("sePatID: ", sePatID)
         }}> SELECT</button>
       </div>
 
