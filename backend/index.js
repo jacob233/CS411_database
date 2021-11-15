@@ -102,7 +102,7 @@ app.get("/api/totalPatients", (require, response) => {
 app.post("/api/reportsPerCompany", (require, response) => {
     const date = require.body.date;
     console.log(date)
-    const sqlSelect = "SELECT mc.MedCompanyName, count(r.ReportID)  \
+    const sqlSelect = "SELECT mc.MedCompanyName, count(r.ReportID) as total  \
     FROM Medical_companies mc \
     JOIN Trials t ON mc.MedCompanyID = t.MedCompanyID \
     JOIN Reports r ON t.TrialID = r.TrialID\

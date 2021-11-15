@@ -43,7 +43,7 @@ function App() {
       patID: patID,
     })
     .then((response) => {
-      if (response.data == []){
+      if (response.data != []){
         setsePatRow(response.data[0])
       }
      
@@ -86,16 +86,26 @@ function App() {
 
 
   // advance query 2
-  const [pateintDate, setDate] = useState('')
+  const [pateintDate, setDate] = useState('2000-03-11 02:06:23');
+  const [companyNameReport, setcompanyNameReport] = useState([]);
+  // setcompanyNameReport([{"MedCompanyName": 'Zieme-Osinski', "total": 2}])
+
   const setReportDate = (pateintDate) => {
     Axios.post('http://localhost:3002/api/reportsPerCompany', {
       date: pateintDate
     }).then((response) => {
       console.log(response.data)
+      setcompanyNameReport(response.data)
       // show in the front-end as a table or list or something.
     });
   }
 
+  function printCompanyReports(props) {
+    const isFilled = props.isFilled;
+    if (isFilled) {
+      return (<h1>Hello</h1>);
+    };
+  }
   // useEffect(() => {
   //   Axios.get('http://localhost:3002/api/totalPatients').then((response) => {
   //     console.log(response.data)
@@ -108,13 +118,13 @@ function App() {
     <div className="App">
       {/* <p>{patPerCompany}</p> */}
       <h1>Tribrdige DB demo</h1>
-      <div className="form">
+      {/* <div className="form">
         <label>Patient Name: </label>
         <input type="text" name="movieName"/>
 
         <button>Submit</button>
-      </div>
-
+      </div> */}
+      
       <div className = "card">
         <h1> INSERT doctor:  </h1>
         <p>doctor first name:</p>
@@ -194,8 +204,6 @@ function App() {
       </div>
 
 
-
-      
       <div className = "card">
         <h1> Reports Number </h1>
         <p>Date: </p>
@@ -204,8 +212,22 @@ function App() {
         } }/>
 
         <button onClick={setReportDate(pateintDate)}> Check </button>
-
       </div>
+    
+      {console.log(companyNameReport == [])}
+
+      {/* <printCompanyReports isFilled={companyNameReport == []}/> */}
+      <ul>
+        {
+        companyNameReport.map((val) => {
+                return (
+                    <li id="list-to-left">{val.MedCompanyName} : {val.total}</li>        
+                );
+              }
+          )
+        }   
+      
+    </ul>
 
     </div>
 
